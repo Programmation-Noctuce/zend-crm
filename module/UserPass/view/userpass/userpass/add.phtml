@@ -1,0 +1,50 @@
+<?php
+$title = 'Add new userpass';
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+<?php
+$username = $form->get('username');
+$username->setAttribute('class', 'form-control');
+$username->setAttribute('placeholder', 'Username');
+
+$password = $form->get('password');
+$password->setAttribute('class', 'form-control');
+$password->setAttribute('placeholder', 'Password');
+
+$passwordRepeat = $form->get('passwordRepeat');
+$passwordRepeat->setAttribute('class', 'form-control');
+$passwordRepeat->setAttribute('placeholder', 'Repeat password');
+
+// This provides CSS classes for the submit button:
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary');
+
+$form->setAttribute('action', $this->url('userpass', ['action' => 'add']));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+?>
+<?php // Wrap the elements in divs marked as form groups, and render the
+      // label, element, and errors separately within ?>
+<div class="form-group">
+    <?= $this->formLabel($username) ?>
+    <?= $this->formElement($username) ?>
+    <?= $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($password) ?>
+    <?= $this->formElement($password) ?>
+    <?= $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($passwordRepeat) ?>
+    <?= $this->formElement($passwordRepeat) ?>
+    <?= $this->formElementErrors()->render($passwordRepeat, ['class' => 'help-block']) ?>
+</div>
+
+<?php
+echo $this->formSubmit($submit);
+echo $this->form()->closeTag();

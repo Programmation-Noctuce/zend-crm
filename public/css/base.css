@@ -1,0 +1,9 @@
+.links-bar {
+    display: inline-block !important;
+}
+
+/*@media (min-width: 768px) {
+    .links-bar {
+        display: inline-block !important;
+    }
+}*/
