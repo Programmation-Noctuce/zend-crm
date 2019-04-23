@@ -1,7 +1,8 @@
 <?php
 namespace User\Controller;
 
-use User\Form\UserAddForm;
+use User\Form\UserLoginForm;
+use User\Form\UserSubscribeForm;
 use User\Model\User;
 use User\Model\UserTable;
 use UserPass\Controller\UserPassController;
@@ -21,23 +22,47 @@ class UserController extends AbstractActionController
         $this->table = $table;
     }
 
-    public function indexAction()
+    public function nameAction()
     {
-        $paginator = $this->table->fetchAll(true);
-    
-        $page = (int) $this->params()->fromQuery('page', 1);
-        $page = ($page < 1) ? 1 : $page;
-        $paginator->setCurrentPageNumber($page);
-    
-        $paginator->setItemCountPerPage(10);
-    
-        return new ViewModel(['paginator' => $paginator]);
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $id = $this->params()->fromRoute('id');
+
+        if(isset($id))
+        {
+            // if(isset($_SESSION["user"]))
+            // {
+
+            // }
+            // else
+            // {
+            //     $this->url()->fromRoute('user', ['action' => 'login']);
+            //     $this->redirect()->toRoute('user', ['action' => 'login']);
+            // }
+        }
+        else
+        {
+            if(isset($_SESSION["user"]))
+            {
+                $id = $_SESSION["user"]->username;
+            }
+            else
+            {
+                $this->redirect()->toRoute('user', ['action' => 'login']);
+            }
+        }
+
+        $user = $this->table->getUser($id);
+        
+        return new ViewModel(['user' => $user]);
     }
 
-    public function addAction()
+    public function subscribeAction()
     {
-        $form = new UserAddForm();
-        $form->get('submit')->setValue('Add');
+        $form = new UserSubscribeForm();
+        $form->get('submit')->setValue('Subscribe');
 
         $request = $this->getRequest();
 
@@ -54,6 +79,7 @@ class UserController extends AbstractActionController
         }
 
         $user->exchangeArray($form->getData());
+
         try {
             $this->table->saveUser($user);
 
@@ -76,10 +102,71 @@ class UserController extends AbstractActionController
         return $this->redirect()->toRoute('user');
     }
 
+    public function loginAction()
+    {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $form = new UserLoginForm();
+        $form->get('submit')->setValue('Login');
+
+        $request = $this->getRequest();
+
+        if (! $request->isPost()) {
+            return ['form' => $form];
+        }
+
+        $user = new User();
+        // $form->setInputFilter($user->getInputFilter());
+        // $form->setData($request->getPost());
+
+        // if (! $form->isValid()) {
+        //     return ['form' => $form];
+        // }
+
+        $username = $request->getPost()->username;
+        $password = $request->getPost()->password;
+
+        $user = $this->table->getUser($username);
+
+        if(!isset($user))
+        {
+            return ['form' => $form];
+        }
+
+        $otherTable = new TableGateway(
+            'userpass', $this->table->tableGateway->getAdapter());
+
+        $results = $otherTable->select([
+            'username' => $user->username,
+        ]);
+        $userpass = $results->current();
+
+        // Mike32323232
+        // this15Pass1!
+
+        if(!password_verify($password, $userpass->password))
+        {
+            return ['form' => $form];
+        }
+
+        $_SESSION['user'] = $user;
+
+        //$user->exchangeArray($form->getData());
+        //$this->table->saveAlbum($album);
+
+        //return $this->redirect()->toRoute('user');
+    }
+
     public function editAction()
     {
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
         try {
-            $user = $this->table->getUser($username);
+            $user = $this->table->getUser($_SESSION['user']->username);
         } catch (\Exception $e) {
             return $this->redirect()->toRoute('user', ['action' => 'index']);
         }

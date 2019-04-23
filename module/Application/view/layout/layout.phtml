@@ -47,8 +47,7 @@
                 </div>
                 <div style="display:inline-block; float:right;">
                     <ul class="nav navbar-nav navbar-user">
-                    <?php $user = $_SESSION['user'];
-                        if (isset($_SESSION['user'])) : ?>
+                    <?php if (isset($_SESSION['user'])) : ?>
                         <li>
                             <a href="<?= $this->url('user') ?>">
                                 <?= $_SESSION['user']->username ?>
@@ -63,7 +62,7 @@
                         </li>
                     <?php else: ?>
                         <li>
-                            <a href="<?= $this->url('user') ?>">
+                            <a href="<?= $this->url('user', ['action' => 'login']) ?>">
                                 Login / Subscribe
                             </a>
                         </li>

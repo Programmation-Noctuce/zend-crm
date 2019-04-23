@@ -3,7 +3,7 @@ namespace User\Form;
 
 use Zend\Form\Form;
 
-class UserAddForm extends Form
+class UserSubscribeForm extends Form
 {
     public function __construct($name = null)
     {

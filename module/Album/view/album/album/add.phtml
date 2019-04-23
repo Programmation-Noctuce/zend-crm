@@ -20,9 +20,10 @@ $submit->setAttribute('class', 'btn btn-primary');
 
 $form->setAttribute('action', $this->url('album', ['action' => 'add']));
 $form->prepare();
-
-echo $this->form()->openTag($form);
 ?>
+
+<?= $this->form()->openTag($form) ?>
+
 <?php // Wrap the elements in divs marked as form groups, and render the
       // label, element, and errors separately within ?>
 <div class="form-group">
@@ -37,7 +38,6 @@ echo $this->form()->openTag($form);
     <?= $this->formElementErrors()->render($artist, ['class' => 'help-block']) ?>
 </div>
 
-<?php
-echo $this->formSubmit($submit);
-echo $this->formHidden($form->get('id'));
-echo $this->form()->closeTag();
+<?= $this->formSubmit($submit) ?>
+<?= $this->formHidden($form->get('id')) ?>
+<?= $this->form()->closeTag() ?>

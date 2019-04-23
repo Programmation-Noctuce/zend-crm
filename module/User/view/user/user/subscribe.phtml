@@ -1,5 +1,5 @@
 <?php
-$title = 'Add new userpass';
+$title = 'Create account';
 $this->headTitle($title);
 ?>
 <h1><?= $this->escapeHtml($title) ?></h1>
@@ -7,6 +7,10 @@ $this->headTitle($title);
 $username = $form->get('username');
 $username->setAttribute('class', 'form-control');
 $username->setAttribute('placeholder', 'Username');
+
+$email = $form->get('email');
+$email->setAttribute('class', 'form-control');
+$email->setAttribute('placeholder', 'your.email@example.com');
 
 $password = $form->get('password');
 $password->setAttribute('class', 'form-control');
@@ -20,7 +24,7 @@ $passwordRepeat->setAttribute('placeholder', 'Repeat password');
 $submit = $form->get('submit');
 $submit->setAttribute('class', 'btn btn-primary');
 
-$form->setAttribute('action', $this->url('userpass', ['action' => 'add']));
+$form->setAttribute('action', $this->url('user', ['action' => 'subscribe']));
 $form->prepare();
 ?>
 
@@ -32,6 +36,12 @@ $form->prepare();
     <?= $this->formLabel($username) ?>
     <?= $this->formElement($username) ?>
     <?= $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+</div>
+
+<div class="form-group">
+    <?= $this->formLabel($email) ?>
+    <?= $this->formElement($email) ?>
+    <?= $this->formElementErrors()->render($email, ['class' => 'help-block']) ?>
 </div>
 
 <div class="form-group">
@@ -47,4 +57,11 @@ $form->prepare();
 </div>
 
 <?= $this->formSubmit($submit) ?>
+
+<div class="form-group">
+    <a href="<?= $this->url('user', ['action' => 'login']) ?>">
+        <input class="btn btn-primary" type="button" value="Login instead" />
+    </a>
+</div>
+
 <?= $this->form()->closeTag() ?>

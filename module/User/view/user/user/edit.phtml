@@ -20,9 +20,10 @@ $form->setAttribute('action', $this->url('album', [
     'id'     => $id,
 ]));
 $form->prepare();
-
-echo $this->form()->openTag($form);
 ?>
+
+<?= $this->form()->openTag($form) ?>
+
 <div class="form-group">
     <?= $this->formLabel($album) ?>
     <?= $this->formElement($album) ?>
@@ -35,7 +36,6 @@ echo $this->form()->openTag($form);
     <?= $this->formElementErrors()->render($artist, ['class' => 'help-block']) ?>
 </div>
 
-<?php
-echo $this->formSubmit($submit);
-echo $this->formHidden($form->get('id'));
-echo $this->form()->closeTag();
+<?= $this->formSubmit($submit) ?>
+<?= $this->formHidden($form->get('id')) ?>
+<?= $this->form()->closeTag() ?>

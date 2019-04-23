@@ -43,15 +43,20 @@ class UserTable
         return $paginator;
     }
 
-    public function getUser($username)
+    public function getUser($usernameOrEmail)
     {
-        $rowset = $this->tableGateway->select(['username' => $username]);
+        $rowset = $this->tableGateway->select(['username' => $usernameOrEmail]);
         $row = $rowset->current();
         if (! $row) {
-            throw new RuntimeException(sprintf(
+            /*throw new RuntimeException(sprintf(
                 'Could not find row with identifier %d',
                 $id
-            ));
+            ));*/
+            $rowset = $this->tableGateway->select(['email' => $usernameOrEmail]);
+            $row = $rowset->current();
+            if (! $row) {
+                $row = null;
+            }
         }
 
         return $row;
